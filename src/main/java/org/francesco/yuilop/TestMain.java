@@ -28,9 +28,16 @@ public class TestMain {
         l3.add(3);
         l3.add(-8);
         
+        List<Integer> l4 = new ArrayList<Integer>();
+        l4.add(2);
+        l4.add(3);
+        l4.add(-4);
+        l4.add(-1);
+        
         System.out.println("Result: " + SumProblem.findSumZero(l));
         System.out.println("Result: " + SumProblem.findSumZero(l2));
         System.out.println("Result: " + SumProblem.findSumZero(l3));
+        System.out.println("Result: " + SumProblem.findSumZero(l4));
 
     }
 

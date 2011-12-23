@@ -37,14 +37,8 @@ public class SumProblem {
         }
         
         // For each negative permutation in class K (goal value), try to find one or more
-        // Depth-first approach, in case the probability of finding the same absolute value in a negative and positive numbers pair is high it is probably worth just scanning for this condition
-        for (Integer goalSum : negative) {
-            if (combinationSum(positive, goalSum)) {
-                return true;
-            }
-        }
-        
-        return false;
+        // Depth-first approach, in case the probability of finding the same absolute value in a negative and positive numbers pair is high it is probably worth just scanning for this condition 
+        return combinationSumCombinations(positive, negative);
     }
     
     /**
@@ -54,21 +48,16 @@ public class SumProblem {
      * @param partial
      * @return
      */
-    private static boolean combinationSumRec(SortedSet<Integer> numbers, int goal, SortedSet<Integer> partial) {
-        int s = 0;
-        for (Integer x : partial) {
-            s += x;
-        }
-        if (s == goal) {
-            return true;
-        }
-        if (s >= goal) {
-            return false;
-        }
-        
+    private static boolean combinationSumRec(SortedSet<Integer> numbers, int goal, int partial) {
         for (Integer num : numbers) {
+            partial += num;
+            if (partial == goal) {
+                return true;
+            }
+            if (partial >= goal) {
+                return false;
+            }
             SortedSet<Integer> remaining = numbers.tailSet(num+1);
-            partial.add(num);
             if (combinationSumRec(remaining, goal, partial)) {
                 return true;
             }
@@ -78,7 +67,25 @@ public class SumProblem {
     }
     
     private static boolean combinationSum(SortedSet<Integer> numbers, int goal) {
-        return combinationSumRec(numbers, goal, new TreeSet<Integer>());
+        return combinationSumRec(numbers, goal, 0);
+    }
+    
+    private static boolean combinationSumCombinationsRec(SortedSet<Integer> operands, SortedSet<Integer> toCheck, int partial) {
+        for (Integer num : toCheck) {
+            partial += num;
+            if (combinationSum(operands,partial)) {
+                return true;
+            }
+            SortedSet<Integer> remaining = toCheck.tailSet(num+1);
+            if (combinationSumCombinationsRec(operands, remaining, partial)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private static boolean combinationSumCombinations(SortedSet<Integer> operands, SortedSet<Integer> toCheck) {
+        return combinationSumCombinationsRec(operands, toCheck, 0);
     }
 
 }
