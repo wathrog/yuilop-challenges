@@ -36,29 +36,31 @@ public class SumProblem {
             }
         }
         
-        // For each negative permutation in class K (goal value), try to find one or more
+        // For each combination of absolute values of negative numbers of the initial set (goal value), try to find the first combination of positive numbers that have the same sum
         // Depth-first approach, in case the probability of finding the same absolute value in a negative and positive numbers pair is high it is probably worth just scanning for this condition 
         return combinationSumCombinations(positive, negative);
     }
     
     /**
-     * <p>Recursive algorithm to find the 
-     * @param numbers
-     * @param goal
-     * @param partial
-     * @return
+     * <p>Recursive algorithm to find if any combination of numbers has sum equals to a given goal</p>
+     * 
+     * @param numbers The set of numbers to combine. Having them sorted in natural order (SortedSet) is optimizing the algorithm by doing pruning of the result space.
+     * @param goal The result to check
+     * @param partial The partial result so far (used for recursion
+     * @return true if any combination of numbers has sum equals to the goal
      */
     private static boolean combinationSumRec(SortedSet<Integer> numbers, int goal, int partial) {
+        //For each number...
         for (Integer num : numbers) {
-            partial += num;
-            if (partial == goal) {
+            partial += num; //Calculate the new partial given as previous one plus number in consideration
+            if (partial == goal) { //Return true if we have a match
                 return true;
             }
-            if (partial >= goal) {
+            if (partial > goal) { //Useless to proceed further in this branch as it can not bring any more partial results <= goal (pruning)
                 return false;
             }
-            SortedSet<Integer> remaining = numbers.tailSet(num+1);
-            if (combinationSumRec(remaining, goal, partial)) {
+            SortedSet<Integer> remaining = numbers.tailSet(num+1); //Get a subset with all the remaining nubmers
+            if (combinationSumRec(remaining, goal, partial)) { //Execute the recursion step
                 return true;
             }
         }
@@ -66,24 +68,40 @@ public class SumProblem {
         
     }
     
+    /**
+     * <p>Primer function for combinationSumRec (no need to pass in a partial value)</p>
+     */
     private static boolean combinationSum(SortedSet<Integer> numbers, int goal) {
         return combinationSumRec(numbers, goal, 0);
     }
     
+    /**
+     * 
+     * <p>Recursive algorithm to find combinations of a set of numbers (toCheck) and verify if any combinations of operands have the same sum </p>
+     * 
+     * @param operands The set of numbers to combine and sum for each combination of input
+     * @param toCheck The target set
+     * @param partial The partial result so far
+     * @return true if any combination of operands has sum equals to any combination of the target set summed
+     */
     private static boolean combinationSumCombinationsRec(SortedSet<Integer> operands, SortedSet<Integer> toCheck, int partial) {
+        //For each number in the target set...
         for (Integer num : toCheck) {
-            partial += num;
-            if (combinationSum(operands,partial)) {
+            partial += num; //Calculate the partial sum
+            if (combinationSum(operands,partial)) { //Verify if any combination of operands summed have the same result, if yes we can successfully return
                 return true;
             }
-            SortedSet<Integer> remaining = toCheck.tailSet(num+1);
-            if (combinationSumCombinationsRec(operands, remaining, partial)) {
+            SortedSet<Integer> remaining = toCheck.tailSet(num+1); //Get a subset with all the remaining targets
+            if (combinationSumCombinationsRec(operands, remaining, partial)) { //Execute the recursion step
                 return true;
             }
         }
         return false;
     }
     
+    /**
+     * <p>Primer function for combinationSumCombinationsRec (no need to pass in a partial value)</p>
+     */
     private static boolean combinationSumCombinations(SortedSet<Integer> operands, SortedSet<Integer> toCheck) {
         return combinationSumCombinationsRec(operands, toCheck, 0);
     }
