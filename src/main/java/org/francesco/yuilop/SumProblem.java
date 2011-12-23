@@ -36,25 +36,49 @@ public class SumProblem {
             }
         }
         
-        // For each negative number (goal value), try to find one or more
+        // For each negative permutation in class K (goal value), try to find one or more
         // Depth-first approach, in case the probability of finding the same absolute value in a negative and positive numbers pair is high it is probably worth just scanning for this condition
         for (Integer goalSum : negative) {
-            for (Integer tmp : positive ) {
-                //X==Y case
-                if (tmp.equals(goalSum)) {
-                    return true;
-                }
-                //If we are currently evaluating a number that is greater than the goal value, we can stop and proceed with the next.
-                if (tmp > goalSum) {
-                    break;
-                }
-                
-                //TODO
-                
+            if (combinationSum(positive, goalSum)) {
+                return true;
             }
         }
         
         return false;
+    }
+    
+    /**
+     * <p>Recursive algorithm to find the 
+     * @param numbers
+     * @param goal
+     * @param partial
+     * @return
+     */
+    private static boolean combinationSumRec(SortedSet<Integer> numbers, int goal, SortedSet<Integer> partial) {
+        int s = 0;
+        for (Integer x : partial) {
+            s += x;
+        }
+        if (s == goal) {
+            return true;
+        }
+        if (s >= goal) {
+            return false;
+        }
+        
+        for (Integer num : numbers) {
+            SortedSet<Integer> remaining = numbers.tailSet(num+1);
+            partial.add(num);
+            if (combinationSumRec(remaining, goal, partial)) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+    
+    private static boolean combinationSum(SortedSet<Integer> numbers, int goal) {
+        return combinationSumRec(numbers, goal, new TreeSet<Integer>());
     }
 
 }
