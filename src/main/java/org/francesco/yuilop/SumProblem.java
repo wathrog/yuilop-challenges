@@ -19,6 +19,10 @@ import java.util.TreeSet;
  * 
  */
 public class SumProblem {
+    
+    //Private constructor for implementing a static class
+    private SumProblem() {
+    }
 
     public static boolean findSumZero(List<Integer> test) {
         // Storing the positive and negative values in a natural order sorted
