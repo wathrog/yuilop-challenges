@@ -8,9 +8,14 @@ import java.util.TreeSet;
  * <p>
  * Build a function that given a list of Integers in the range [-65000,65000],
  * the function returns true if any subset of the list summed is equal to zero.
- * False otherwise. Example: [0, 1, 2, -3] returns true. As 1+2+(-3)==0. [1, 2,
- * 3, -8] returns false. As no subset summed is equal 0. [1, 4, 5, 2, -3]
- * returns true.
+ * False otherwise.
+ * </p>
+ * Example: 
+ * <ul>
+ *   <li>[0, 1, 2, -3] returns true. As 1+2+(-3)==0.</li>
+ *   <li>[1, 2, 3, -8] returns false.As no subset summed is equal 0.</li>
+ *   <li>[1, 4, 5, 2, -3] returns true.</li>
+ * </ul>
  * </p>
  * 
  * Assuming that the list does not contain any duplicates
@@ -24,7 +29,16 @@ public class SumProblem {
     private SumProblem() {
     }
 
-    public static boolean findSumZero(List<Integer> test) {
+    /**
+     * <p>
+     * Recursive solution to the sum problem.
+     * </p>
+     * @param list
+     *          The list of integers to test.
+     * @return
+     *          true if if any subset of the list summed is equal to zero, false otherwise.
+     */
+    public static boolean findSumZero(List<Integer> list) {
         // Storing the positive and negative values in a natural order sorted
         // set
         SortedSet<Integer> negative = new TreeSet<Integer>();
@@ -32,7 +46,7 @@ public class SumProblem {
 
         // Scan the input list and separate positive ints from negative ints.
         // Exit on Zero as we have found a solution {0}
-        for (Integer num : test) {
+        for (Integer num : list) {
             if (num == 0) {
                 return true;
             } else if (num > 0) {
